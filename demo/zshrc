@@ -5,12 +5,24 @@
 
 autoload -Uz compinit && compinit -u -d "${TMPDIR:-/tmp}/zsh-wt-demo.zcompdump"
 autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' formats '%F{blue}git:%F{green}%b%f '
+zstyle ':vcs_info:git:*' formats 'git:%F{green}%b%f '
 precmd() { vcs_info }
+
+# The recordings type comments as captions.
+setopt INTERACTIVE_COMMENTS
 
 source "${${(%):-%x}:A:h:h}/wt.plugin.zsh"
 
-PROMPT='$(git_worktree_hint)${vcs_info_msg_0_}%F{yellow}%1~%F{magenta}:%f '
+PROMPT='$(git_worktree_hint)${vcs_info_msg_0_}%1~: '
+
+# Mute all git colors except local branch names (green), so the cyan [wt]
+# tags stand out.
+export GIT_CONFIG_COUNT=5
+export GIT_CONFIG_KEY_0=color.decorate.remoteBranch GIT_CONFIG_VALUE_0=normal
+export GIT_CONFIG_KEY_1=color.decorate.HEAD GIT_CONFIG_VALUE_1=normal
+export GIT_CONFIG_KEY_2=color.decorate.tag GIT_CONFIG_VALUE_2=normal
+export GIT_CONFIG_KEY_3=color.diff.commit GIT_CONFIG_VALUE_3=normal
+export GIT_CONFIG_KEY_4=log.graphColors GIT_CONFIG_VALUE_4=normal
 
 # Print instead of paging, so recordings show the whole output.
 export GIT_PAGER=cat

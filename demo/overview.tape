@@ -10,7 +10,7 @@ Require git
 Set Shell zsh
 Set FontSize 16
 Set Width 1000
-Set Height 900
+Set Height 960
 Set Padding 20
 Set TypingSpeed 60ms
 
@@ -21,12 +21,18 @@ Enter
 Wait+Screen@30s /shop:/
 Show
 
+Type "# wtlog marks branches that have a worktree with [wt]"
+Sleep 800ms
+Enter
 Type "wtlog --graph --oneline --branches --remotes"
 Sleep 500ms
 Enter
 Wait /shop:/
 Sleep 4s
 
+Type "# jump to one by branch name, a substring is enough"
+Sleep 800ms
+Enter
 Type "wt check"
 Sleep 500ms
 Enter
