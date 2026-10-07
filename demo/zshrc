@@ -1,0 +1,18 @@
+# zsh setup for recording the demo: a minimal prompt and the plugin. The vhs
+# tapes source this; you can too:
+#
+#   demo/setup.sh && source demo/zshrc
+
+autoload -Uz compinit && compinit -u -d "${TMPDIR:-/tmp}/zsh-wt-demo.zcompdump"
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' formats '%F{blue}git:%F{green}%b%f '
+precmd() { vcs_info }
+
+source "${${(%):-%x}:A:h:h}/wt.plugin.zsh"
+
+PROMPT='$(git_worktree_hint)${vcs_info_msg_0_}%F{yellow}%1~%F{magenta}:%f '
+
+# Print instead of paging, so recordings show the whole output.
+export GIT_PAGER=cat
+
+cd "${WT_DEMO_ROOT:-$HOME/wt-demo}/shop"

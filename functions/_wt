@@ -1,0 +1,26 @@
+#compdef wt
+
+# Completion for wt from zsh-wt.
+
+local -aU branches
+local line
+
+while IFS= read -r line; do
+  if [[ "$line" == branch\ refs/heads/* ]]; then
+    branches+=("${line#branch refs/heads/}")
+  fi
+done < <(command git worktree list --porcelain 2>/dev/null)
+
+# Branches complete from any substring, ignoring case, like `wt` matches.
+if (( CURRENT == 2 )); then
+  compadd -- -h -l -ll -p -d -D
+  (( ${#branches[@]} )) || return 0
+  compadd -M 'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*' -- "${branches[@]}"
+  return
+fi
+
+if (( CURRENT == 3 )) && [[ "${words[2]}" == "-d" || "${words[2]}" == "-D" ]]; then
+  (( ${#branches[@]} )) || return 0
+  compadd -M 'm:{a-zA-Z}={A-Za-z} l:|=* r:|=*' -- "${branches[@]}"
+  return
+fi
